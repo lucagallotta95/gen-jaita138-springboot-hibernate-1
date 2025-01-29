@@ -4,18 +4,22 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.generation.jaita138.demo6.demo6.db.entity.Utente;
+import org.generation.jaita138.demo6.demo6.db.entity.Role;
+import org.generation.jaita138.demo6.demo6.db.service.RoleService;
 import org.generation.jaita138.demo6.demo6.db.service.UtenteService;
 
 public class CliManager {
 
-
     private Scanner sc;
     private UtenteService utenteService;
+    private RoleService roleService;
 
-    public CliManager(UtenteService utenteService) {
+    //costruttore
+    public CliManager(UtenteService utenteService, RoleService roleService) {
 
         sc = new Scanner(System.in);
         this.utenteService = utenteService;
+        this.roleService = roleService;
 
         printOptions();
     
@@ -29,7 +33,11 @@ public class CliManager {
         System.out.println("3. Modifica record");
         System.out.println("4. Elimina record");
         System.out.println("5.Trova i nomi che iniziano per A");
-        System.out.println("6. Esci");
+        System.out.println("6. Trova utenti che iniziano con per a");
+        System.out.println("7. Trovare gli utenti con credito maggiore di 10");
+        System.out.println("8. Trovare gli utenti con nome o cognome null");
+        System.out.println("9. trovare gli utenti con credito positivo ma inferiore a 10");
+        System.out.println("10. Esci");
         System.out.println("");
 
         String strValue = sc.nextLine();
@@ -102,7 +110,18 @@ public class CliManager {
 
         System.out.println("credito:");
         int credito = sc.nextInt();
+        sc.nextLine();
         u.setCredito(credito * 100);
+
+        System.out.println("ruoli:");
+        List<Role> roles = roleService.findAll();
+        System.out.println(roles);
+        System.out.println("ruolo id:");
+        String strRoleId = sc.nextLine();
+        Long roleId = Long.parseLong(strRoleId);
+        Role role = roleService.findById(roleId);
+        System.out.println(role);
+
 
         utenteService.save(u);
     }
