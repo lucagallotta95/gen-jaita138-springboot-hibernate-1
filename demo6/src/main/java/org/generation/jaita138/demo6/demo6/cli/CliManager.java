@@ -88,27 +88,27 @@ public class CliManager {
         System.out.println("-------------------------------------");
     }
 
-    private void insert() {
+    private void salva(Utente u){
 
-        Utente u = new Utente();
+        boolean isEdit = u.getId() != null;
 
-        System.out.println("nome:");
+        System.out.println("nome: " + (isEdit ? "(" + u.getNome() + ")" : ""));
         String nome = sc.nextLine();
         u.setNome(nome);
 
-        System.out.println("cognome:");
+        System.out.println("cognome: " + (isEdit ? "(" + u.getCognome() + ")" : "") );
         String cognome = sc.nextLine();
         u.setCognome(cognome);
 
-        System.out.println("username:");
+        System.out.println("username: " + (isEdit ? "(" + u.getUsername() + ")" : ""));
         String username = sc.nextLine();
         u.setUsername(username);
 
-        System.out.println("password:");
+        System.out.println("password: " + (isEdit ? "(" + u.getPassword() + ")" : ""));
         String password = sc.nextLine();
         u.setPassword(password);
 
-        System.out.println("credito:");
+        System.out.println("credito: " + (isEdit ? "(" + u.getCredito() + ")" : ""));
         int credito = sc.nextInt();
         sc.nextLine();
         u.setCredito(credito * 100);
@@ -116,14 +116,21 @@ public class CliManager {
         System.out.println("ruoli:");
         List<Role> roles = roleService.findAll();
         System.out.println(roles);
-        System.out.println("ruolo id:");
+        System.out.println("ruolo id: " + (isEdit ? "(" + u.getRole().getId() + ")" : ""));
         String strRoleId = sc.nextLine();
         Long roleId = Long.parseLong(strRoleId);
         Role role = roleService.findById(roleId);
         System.out.println(role);
 
-
         utenteService.save(u);
+
+    }
+
+    private void insert() {
+
+        Utente u = new Utente();
+
+        salva(u);
     }
 
     private void edit() {
@@ -139,28 +146,7 @@ public class CliManager {
             return;
         }
 
-        System.out.println("nome: (" + u.getNome() + ")");
-        String nome = sc.nextLine();
-        u.setNome(nome);
-
-        System.out.println("cognome: (" + u.getCognome() + ")");
-        String cognome = sc.nextLine();
-        u.setCognome(cognome);
-
-        System.out.println("username: (" + u.getUsername() + ")");
-        String username = sc.nextLine();
-        u.setUsername(username);
-
-        System.out.println("password: (" + u.getPassword() + ")");
-        String password = sc.nextLine();
-        u.setPassword(password);
-
-        System.out.println("virtuale: (" + u.getCredito() + ")");
-        String strCredito = sc.nextLine();
-        int credito = Integer.parseInt(strCredito);
-        u.setCredito(credito * 100);
-
-        utenteService.save(u);
+        salva(u);
     }
 
     private void delete() {
