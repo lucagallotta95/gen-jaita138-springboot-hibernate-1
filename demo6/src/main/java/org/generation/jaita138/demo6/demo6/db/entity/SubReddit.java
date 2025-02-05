@@ -18,11 +18,10 @@ public class SubReddit {
 
     @Column(columnDefinition = "TEXT")
     private String descrizione;
-    
+
     public Long getId() {
         return id;
     }
-
 
 
     public void setId(Long id) {
