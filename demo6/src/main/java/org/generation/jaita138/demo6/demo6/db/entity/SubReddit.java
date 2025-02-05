@@ -1,10 +1,13 @@
 package org.generation.jaita138.demo6.demo6.db.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class SubReddit {
@@ -22,6 +25,9 @@ public class SubReddit {
     public Long getId() {
         return id;
     }
+
+    @ManyToMany(mappedBy = "subRedditS")
+    private List<Utente> utenti;
 
 
     public void setId(Long id) {
