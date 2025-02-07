@@ -1,5 +1,6 @@
 package org.generation.jaita138.demo6.demo6.db.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -33,13 +34,23 @@ public class Utente {
     private Role role;
 
     @ManyToMany
-    private List <SubReddit> subRedditS;
+    private List <SubReddit> subRedditS = new ArrayList<>();
+
+
 
 
     private int credito;
 
     public Long getId() {
         return id;
+    }
+
+    public List<SubReddit> getSubRedditS() {
+        return subRedditS;
+    }
+
+    public void setSubRedditS(List<SubReddit> subRedditS) {
+        this.subRedditS = subRedditS;
     }
 
     public void setId(Long id) {

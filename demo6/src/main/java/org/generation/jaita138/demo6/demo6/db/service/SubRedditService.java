@@ -22,8 +22,8 @@ public class SubRedditService {
         return subRedditRepo.findAll();
     }
 
-    public Optional<SubReddit> findById(Long id) {
-        return subRedditRepo.findById(id);
+    public SubReddit findById(Long id) {
+        return subRedditRepo.findById(id).orElse(null);
     }
 
     public void delete(SubReddit entity) {

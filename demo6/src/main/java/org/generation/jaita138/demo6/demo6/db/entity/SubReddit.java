@@ -29,6 +29,8 @@ public class SubReddit {
     @ManyToMany(mappedBy = "subRedditS")
     private List<Utente> utenti;
 
+    
+
 
     public void setId(Long id) {
         this.id = id;

@@ -1,11 +1,14 @@
 package org.generation.jaita138.demo6.demo6.cli;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import org.generation.jaita138.demo6.demo6.db.entity.Utente;
 import org.generation.jaita138.demo6.demo6.db.entity.Role;
+import org.generation.jaita138.demo6.demo6.db.entity.SubReddit;
 import org.generation.jaita138.demo6.demo6.db.service.RoleService;
+import org.generation.jaita138.demo6.demo6.db.service.SubRedditService;
 import org.generation.jaita138.demo6.demo6.db.service.UtenteService;
 
 public class CliManager {
@@ -13,13 +16,15 @@ public class CliManager {
     private Scanner sc;
     private UtenteService utenteService;
     private RoleService roleService;
+    private SubRedditService subRedditService;
 
     //costruttore
-    public CliManager(UtenteService utenteService, RoleService roleService) {
+    public CliManager(UtenteService utenteService, RoleService roleService, SubRedditService subRedditService) {
 
         sc = new Scanner(System.in);
         this.utenteService = utenteService;
         this.roleService = roleService;
+        this.subRedditService = subRedditService;
 
         printOptions();
     
@@ -122,8 +127,52 @@ public class CliManager {
         Role role = roleService.findById(roleId);
         System.out.println(role);
 
-        utenteService.save(u);
+        if (isEdit) {
+            System.out.println("SubReddit attuali");
+            System.out.println(u.getSubRedditS());
 
+            System.out.println("Resetta per modificarli");
+            if (sc.nextLine().equalsIgnoreCase("y")) {
+                u.setSubRedditS(new ArrayList<>());
+            }
+        }
+
+        while (true) {
+            System.out.println("Vuoi aggiungere dei SubReddit? (y/n)");
+            if (!sc.nextLine().equalsIgnoreCase("y")) {
+                break;
+            }
+
+            List<SubReddit> availableSub = availableReddits(u);
+            if (availableSub.isEmpty()) {
+                System.out.println("Non ci sono Sub disponibili.");
+                break;
+            }
+
+            System.out.println("SubReddit disponibili: ");
+            availableSub.forEach(System.out::println);
+
+            System.out.println("SubReddit id: ");
+            Long subRedditId = sc.nextLong();
+            sc.nextLine();
+
+            SubReddit subReddit = subRedditService.findById(subRedditId);
+            if (subReddit == null) {
+                System.out.println("Sub non trovato.");
+                continue;
+            }
+
+            u.getSubRedditS().add(subReddit);
+        }
+
+            utenteService.save(u);
+            System.out.println("Utente salvato");
+
+    }
+
+    private List<SubReddit> availableReddits(Utente utente) {
+        List<Long> sRedditId = utente.getSubRedditS().stream().map(SubReddit::getId).toList();
+        return subRedditService.findAll().stream().filter(sb -> !sRedditId.contains(sb.getId())).toList();
     }
 
     private void insert() {
@@ -132,6 +181,8 @@ public class CliManager {
 
         salva(u);
     }
+
+    
 
     private void edit() {
 
